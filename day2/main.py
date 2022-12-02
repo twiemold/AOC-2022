@@ -22,6 +22,37 @@ class SantaEnums(enum.Enum):
     SCISSORS_PLAY = 'Z'
 
 
+class OutcomeEnums(enum.Enum):
+    MUST_LOSE = 'X'
+    MUST_DRAW = 'Y'
+    MUST_WIN = 'Z'
+
+
+def return_needed_outcome(elf_play, needed_outcome):
+
+    if needed_outcome == OutcomeEnums.MUST_LOSE.value:
+        if elf_play == ElfEnums.ROCK_PLAY.value:
+            return ScoreEnums.SCISSORS_SCORE.value
+        elif elf_play == ElfEnums.PAPER_PLAY.value:
+            return ScoreEnums.ROCK_SCORE.value
+        else:
+            return ScoreEnums.PAPER_SCORE.value
+    elif needed_outcome == OutcomeEnums.MUST_DRAW.value:
+        if elf_play == ElfEnums.ROCK_PLAY.value:
+            return ScoreEnums.ROCK_SCORE.value + DRAW_POINTS
+        elif elf_play == ElfEnums.PAPER_PLAY.value:
+            return ScoreEnums.PAPER_SCORE.value + DRAW_POINTS
+        else:
+            return ScoreEnums.SCISSORS_SCORE.value + DRAW_POINTS
+    else:
+        if elf_play == ElfEnums.ROCK_PLAY.value:
+            return ScoreEnums.PAPER_SCORE.value + WIN_POINTS
+        elif elf_play == ElfEnums.PAPER_PLAY.value:
+            return ScoreEnums.SCISSORS_SCORE.value + WIN_POINTS
+        else:
+            return ScoreEnums.ROCK_SCORE.value + WIN_POINTS
+
+
 def will_win(elf_play, santa_play):
     win = False
     if elf_play == ElfEnums.ROCK_PLAY.value:
@@ -83,11 +114,7 @@ def calculate_score(play_list):
     }
     score = 0
     for plays in play_list:
-        score += score_dict[plays[1]]
-        if will_draw(plays[0], plays[1]):
-            score += DRAW_POINTS
-        elif will_win(plays[0], plays[1]):
-            score += WIN_POINTS
+        score += return_needed_outcome(plays[0], plays[1])
     return score
 
 
@@ -98,7 +125,7 @@ def test():
         ['C', 'Z']
     ]
     score = calculate_score(test_plays)
-    assert score == 15
+    assert score == 12
 
 
 def main():
