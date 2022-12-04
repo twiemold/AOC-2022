@@ -31,6 +31,18 @@ def find_overlaps(elves):
     return overlaps
 
 
+def find_overlaps_v2(elves):
+    overlaps = 0
+    for elf_pair in elves:
+        if (elf_pair.e1_start <= elf_pair.e2_start and elf_pair.e1_end >= elf_pair.e2_end) or \
+                (elf_pair.e2_start <= elf_pair.e1_start and elf_pair.e2_end >= elf_pair.e1_end):
+            overlaps += 1
+        elif elf_pair.e1_start <= elf_pair.e2_start <= elf_pair.e1_end or \
+                elf_pair.e2_start <= elf_pair.e1_start <= elf_pair.e2_end:
+            overlaps += 1
+    return overlaps
+
+
 def test():
     test_elf_pairs = [ElfPair(2, 4, 6, 8),
                       ElfPair(2, 3, 4, 5),
@@ -38,15 +50,15 @@ def test():
                       ElfPair(2, 8, 3, 7),
                       ElfPair(6, 6, 4, 6),
                       ElfPair(2, 6, 4, 8)]
-    test_overlaps = find_overlaps(test_elf_pairs)
-    assert test_overlaps == 2
+    test_overlaps = find_overlaps_v2(test_elf_pairs)
+    assert test_overlaps == 4
 
 
 def main():
     test()
     data = read_file('input.txt')
     all_pairs = create_pairs(data)
-    overlaps = find_overlaps(all_pairs)
+    overlaps = find_overlaps_v2(all_pairs)
     print(f'The number of overlaps is {overlaps}')
 
 
