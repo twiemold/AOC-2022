@@ -9,7 +9,7 @@ def read_file(filename: str) -> list[str]:
     return data
 
 
-def create_stacks():
+def create_stacks() -> list[list[str]]:
     return [['R', 'G', 'H', 'Q', 'B', 'S', 'T', 'N'],
             ['H', 'S', 'F', 'D', 'P', 'Z', 'J'],
             ['Z', 'H', 'V'],
@@ -21,7 +21,7 @@ def create_stacks():
             ['W', 'H', 'L', 'M', 'T', 'D', 'N', 'C']]
 
 
-def process_instructions(data, stacks: list[list[str]], stack_input_line_num):
+def process_instructions(data: list[str], stacks: list[list[str]], stack_input_line_num: int) -> list[list[str]]:
     instrs = data[stack_input_line_num:]
     search_pattern = r'move\s(?P<num_to_move>\d{1,2})\sfrom\s(?P<move_from>\d{1})\sto\s(?P<move_to>\d{1})'
     for instr in instrs:
@@ -31,7 +31,7 @@ def process_instructions(data, stacks: list[list[str]], stack_input_line_num):
     return stacks
 
 
-def process_instructions_v2(data, stacks: list[list[str]], stack_input_line_num):
+def process_instructions_v2(data: list[str], stacks: list[list[str]], stack_input_line_num: int) -> list[list[str]]:
     instrs = data[stack_input_line_num:]
     search_pattern = r'move\s(?P<num_to_move>\d{1,2})\sfrom\s(?P<move_from>\d{1})\sto\s(?P<move_to>\d{1})'
     for instr in instrs:
@@ -42,7 +42,7 @@ def process_instructions_v2(data, stacks: list[list[str]], stack_input_line_num)
     return stacks
 
 
-def get_top_crates(stacks: list[list[str]]):
+def get_top_crates(stacks: list[list[str]]) -> list[str]:
     return [sub_stack[-1] for sub_stack in stacks]
 
 
