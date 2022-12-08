@@ -43,7 +43,9 @@ def process_commands(commands: list[str]):
                     if folder.name == new_dir:
                         working_dir = folder
                         break
-    root_dir.size += working_dir.size
+    while working_dir.name != '/':
+        working_dir.parent.size += working_dir.size
+        working_dir = working_dir.parent
     return root_dir
 
 
@@ -58,20 +60,36 @@ def sum_folders_of_size(root_dir, total, size):
     return total
 
 
+def find_directory(root_dir, size_to_locate, min_size_found):
+    if not root_dir:
+        return min_size_found
+    min_size_found = find_directory(root_dir[0].contains, size_to_locate, min_size_found)
+    new_list = root_dir[1:]
+    min_size_found = find_directory(new_list, size_to_locate, min_size_found)
+    if size_to_locate < root_dir[0].size < min_size_found:
+        min_size_found = root_dir[0].size
+    return min_size_found
+
+
 def test():
     test_data = read_file('test_input.txt')
     test_root = process_commands(test_data)
     assert test_root.size == 48381165
     test_sum = sum_folders_of_size(test_root.contains, 0, 100000)
     assert test_sum == 95437
+    needed_space = abs((70000000 - test_root.size) - 30000000)
+    test_find = find_directory(test_root.contains, needed_space, test_root.size)
+    assert test_find == 24933642
 
 
 def main():
     test()
     data = read_file('input.txt')
     root = process_commands(data)
-    sum_val = sum_folders_of_size(root.contains, 0, 100000)
-    print(f'{sum_val} is the sum of folders less than 100000')
+    # sum_val = sum_folders_of_size(root.contains, 0, 100000)
+    needed_space = abs((70000000 - root.size) - 30000000)
+    min_found = find_directory(root.contains, needed_space, root.size)
+    print(f'{min_found} is the smallest directory greater than {needed_space}')
 
 
 if __name__ == '__main__':
